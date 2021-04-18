@@ -7,3 +7,11 @@
 body {
     padding-top: 56px;
 }
+
+.flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}

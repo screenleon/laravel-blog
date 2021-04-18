@@ -3,19 +3,13 @@
         <small>Secondary Text</small>
     </h1>
 
-    <x-blog-posts></x-blog-posts>
-    <x-blog-posts></x-blog-posts>
-    <x-blog-posts></x-blog-posts>
-
-    <!-- Pagination -->
-    <ul class="pagination justify-content-center mb-4">
-        <li class="page-item">
-            <a class="page-link" href="#">&larr; Older</a>
-        </li>
-        <li class="page-item disabled">
-            <a class="page-link" href="#">Newer &rarr;</a>
-        </li>
-    </ul>
+    @foreach ($posts as $post)
+        <x-blog-posts :post="$post"></x-blog-posts>
+    @endforeach
+    
+    <div class="mb-4">
+        {{ $posts->links() }}
+    </div>
 
     <x-slot name="sideBar">
         <x-search-widget></x-search-widget>

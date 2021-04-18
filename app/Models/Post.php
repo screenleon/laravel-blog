@@ -22,6 +22,8 @@ class Post extends Model
 {
     use HasFactory, Sluggable;
 
+    const SINGLE_PAGE_AMOUNT = 5;
+
     public function sluggable(): array
     {
         return [
