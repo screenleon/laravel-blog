@@ -1,0 +1,43 @@
+version: '3'
+services:
+    db:
+        image: mariadb
+        labels:
+            - phpmyadmin.autoconfig.target=phpmyadmin
+            - phpmyadmin.autoconfig.cfg.verbose=laravel-blog
+            - phpmyadmin.autoconfig.cfg.AllowNoPassword=true
+        environment:
+            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+        networks:
+            - blog
+            - default
+
+    app:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile.app
+        depends_on:
+            - db
+        volumes:
+            - ./:/var/www/
+        networks:
+            - blog
+
+    web:
+        image: nginx:1.17-alpine
+        depends_on:
+            - app
+        ports:
+            - 80:80
+        volumes:
+            - ./public:/var/www/public
+            - ./logs:/var/log/nginx
+            - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - blog
+
+networks:
+    default:
+    blog:
+        external:
+            name: laravel-blog
