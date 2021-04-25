@@ -34,8 +34,8 @@
 
             <!-- Sidebar Widgets Column -->
             <div class="col-md-4">
-                {{ $sideBar }}
-                
+                <x-search-widget></x-search-widget>
+                <x-categories-widget></x-categories-widget>
             </div>
         </div>
         <!-- /.row -->

@@ -10,9 +10,4 @@
     <div class="mb-4">
         {{ $posts->links() }}
     </div>
-
-    <x-slot name="sideBar">
-        <x-search-widget></x-search-widget>
-        <x-categories-widget></x-categories-widget>
-    </x-slot>
 </x-app-layout>
