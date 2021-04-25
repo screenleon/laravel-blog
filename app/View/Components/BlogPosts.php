@@ -27,6 +27,6 @@ class BlogPosts extends Component
      */
     public function render()
     {
-        return view('components.blog-posts');
+        return view('components.posts.blog-posts');
     }
 }

@@ -23,6 +23,6 @@ class CommentForm extends Component
      */
     public function render()
     {
-        return view('components.comment-form');
+        return view('components.posts.comment-form');
     }
 }
