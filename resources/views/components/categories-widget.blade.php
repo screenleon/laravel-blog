@@ -9,7 +9,7 @@
                         <ul class="list-unstyled mb-0">
                 @endif
                             <li>
-                                <a href="#">{{ $category->name }}</a>
+                                <a href="{{ route('posts.index', ['category' => $category->name]) }}">{{ $category->name }}</a>
                             </li>
                 @if ($loop->iteration % 3 === 0 || $loop->iteration === $loop->last)
                         </ul>
