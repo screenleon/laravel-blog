@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Post;
+use App\Models\Category;
 
 class PostController extends Controller
 {
@@ -23,10 +24,8 @@ class PostController extends Controller
         // Set Category filter
         if($request->input('category') != null) {
             $category = $request->input('category');
-            $query = $query->addSelect(['category_id' => function ($query) use ($category) {
-                /** @var \Illuminate\Database\Query\Builder $query */
-                $query->select('id')->from('categories')->where(['name' => $category])->get(1);
-            }]);
+            $query = $query->leftJoin((new Category)->getTable(), 'posts.category_id', '=', 'categories.id');
+            $condition[] = ['categories.name', '=', $category];
         }
 
         $posts = $query->where($condition)->simplePaginate(Post::SINGLE_PAGE_AMOUNT);
