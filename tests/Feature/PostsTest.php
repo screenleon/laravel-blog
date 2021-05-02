@@ -61,6 +61,7 @@ class PostsTest extends TestCase
         $response->assertSee($categoryOne->name);
     }
 
+    /** @test */
     public function same_post_title_different_slugs()
     {
         /** @var Category */
@@ -77,5 +78,69 @@ class PostsTest extends TestCase
             'category_id' => $category->id,
             'content' => 'Another first content'
         ]);
+
+        $response = $this->get(route('posts.view', $postOne));
+
+        $response->assertSuccessful();
+        $this->assertTrue(request()->path() === 'posts/my-first-post');
+
+        $response = $this->get(route('posts.view', $postTwo));
+        $response->assertSuccessful();
+        $this->assertTrue(request()->path() === 'posts/my-first-post-2');
+    }
+
+    /** @test */
+    public function list_of_posts_filter_title_show_on_main_page()
+    {
+        $category = Category::factory()->create(['name' => 'Category 1']);
+
+        /** @var Post */
+        $postOne = Post::factory()->create([
+            'title' => 'My First Post',
+            'category_id' => $category->id,
+        ]);
+
+        /** @var Post */
+        $postTwo = Post::factory()->create([
+            'title' => 'My Second Post',
+            'category_id' => $category->id
+        ]);
+
+        $response = $this->get(route('posts.index', ['search' => 'First']));
+        
+        $response->assertStatus(200);
+        $response->assertSee($postOne->title);
+        $response->assertSee($postOne->content);
+        
+        $response->assertDontSee($postTwo->title);
+        $response->assertDontSee($postTwo->content);
+    }
+
+    /** @test */
+    public function list_of_posts_filter_category_show_on_main_page()
+    {
+        $categoryOne = Category::factory()->create(['name' => 'Category 1']);
+        $categoryTwo = Category::factory()->create(['name' => 'Category 2']);
+
+        /** @var Post */
+        $postOne = Post::factory()->create([
+            'title' => 'My First Post',
+            'category_id' => $categoryOne->id,
+        ]);
+
+        /** @var Post */
+        $postTwo = Post::factory()->create([
+            'title' => 'My Second Post',
+            'category_id' => $categoryTwo->id
+        ]);
+
+        $response = $this->get(route('posts.index', ['category' => $categoryOne->name]));
+        
+        $response->assertStatus(200);
+        $response->assertSee($postOne->title);
+        $response->assertSee($postOne->content);
+        
+        $response->assertDontSee($postTwo->title);
+        $response->assertDontSee($postTwo->content);
     }
 }
